@@ -1,11 +1,33 @@
 import guizero as gui
+import operations as ops
 import webbrowser
 
 # App -----
 app = gui.App(title='Pixela Habit Tracker', layout='grid', width=510, height=340)
 app.bg = '#FFFAFA'
 
+
 # Functions -----
+
+# on Submit button press:
+
+# 1. get values: username, graph ID, request type, date option, quantity
+# 2. call date_parser()
+#       contains logic to check custom date for validity & range, and parse date option into proper string for API)
+# 3. if statement for request type:
+#   a. if request == post:
+#       call post_new_pixel()
+#   b. if request == put:
+#       call modify_pixel()
+#   c. if request == delete:
+#       call delete_pixel()
+# 4. if statement for response to api call in step 3
+#   a. ifSuccess == false:
+#       change image to red X
+#       error pop-up (containing error message?)
+#   b. if isSuccess == true:
+#       change image to green check
+#       call clear_text_entry_fields()
 
 
 def submit_request_to_api():
@@ -56,20 +78,20 @@ pixel_options_box = gui.Box(app, grid=[0, 2], width=170, height=140)
 pixel_options_box_heading = gui.Text(pixel_options_box, text='Pixel Options:', size=11, color='red')
 pixel_options_box_heading.tk.config(pady=12)
 pixel_options = gui.ButtonGroup(pixel_options_box,
-                                options=[['Add a pixel', 'post'],
-                                         ['Modify a pixel', 'put'],
+                                options=[['Add a pixel', 'add'],
+                                         ['Modify a pixel', 'modify'],
                                          ['Delete a pixel', 'delete']],
-                                selected='post')
+                                selected='add')
 
 # # Date Options Box
 date_options_box = gui.Box(app, grid=[1, 2], width=170, height=140)
 
 date_options_box_heading = gui.Text(date_options_box, text='Date options:', size=11, color='red')
 date_options_box_heading.tk.config(pady=12)
-date_options = gui.ButtonGroup(date_options_box,
-                               options=[['Today', 'today'],
-                                        ['Custom:', 'custom']],
-                               selected='today')
+date_choice = gui.ButtonGroup(date_options_box,
+                              options=[['Today', 'today'],
+                                       ['Custom:', 'custom']],
+                              selected='today')
 date_entry_textbox = gui.TextBox(date_options_box, text='', width=12)
 date_hint_text = gui.Text(date_options_box, text='(YYYY-MM-DD)', size=8)
 
