@@ -1,36 +1,35 @@
 import guizero as gui
+import webbrowser
 
 # App -----
-app = gui.App(title='Pixela Habit Tracker', layout='grid', width=510, height=340)
+app = gui.App(title='Pixela Habit Tracker', layout='grid', width=510, height=350)
 app.bg = '#FFFAFA'
 
 # Functions -----
 
 
-def do_something():
-    # changing_text.value = graph_name_text_box.value
-    # pixel_choice.value = pixel_action.value_text
-    # success_error_image.image = 'images/success.png'
-    pass
+def submit_request_to_api():
+    request_type = pixel_options.value
+    print(request_type)
+    success_error_image.image = 'images/success.png'
+    app.after(5000, clear_text_entry_fields)
 
 
-def reset():
-    # quantity_text_box.clear()
-    # graph_name_text_box.value = 'graph1'
-    # dd.value = 'dd'
-    # mm.value = 'mm'
-    # yyyy.value = 'yyyy'
-    pass
+def clear_text_entry_fields():
+    quantity_entry_textbox.clear()
+    date_entry_textbox.clear()
+    success_error_image.image = 'images/blank.png'
 
 
 def open_graph_url():
-    pass
+    graph_url = 'https://pixe.la/v1/users/aeversme/graphs/graph1.html'
+    webbrowser.open_new(graph_url)
 
 
 # Widgets -----
 
 # # Header Box
-header_box = gui.Box(app, grid=[0, 0, 3, 1], width=510, height=70)
+header_box = gui.Box(app, grid=[0, 0, 3, 1], width=510, height=80)
 
 header_sub_box = gui.Box(header_box)
 pixela_logo = gui.Picture(header_sub_box, image='images/PIXELA_RED.png', width=60, height=60, align='left')
@@ -41,7 +40,7 @@ graph_properties_box = gui.Box(app, grid=[0, 1, 3, 1], width=510, height=60, lay
 
 username_box = gui.Box(graph_properties_box, grid=[0, 0], width=150, height=60)
 username_text = gui.Text(username_box, text='Username: ', size=11, color='red', align='left')
-username_textbox = gui.TextBox(username_box, text='aeversme', width=11, align='right')
+username_entry_textbox = gui.TextBox(username_box, text='aeversme', width=11, align='right')
 
 graph_button_box = gui.Box(graph_properties_box, grid=[1, 0], width=160, height=60)
 graph_button_box.tk.config(pady=10)
@@ -49,37 +48,37 @@ graph_button = gui.PushButton(graph_button_box, open_graph_url, text='Go to my g
 
 graph_id_box = gui.Box(graph_properties_box, grid=[2, 0], width=150, height=60)
 graph_id_text = gui.Text(graph_id_box, text='Graph ID: ', size=11, color='red', align='left')
-graph_id_textbox = gui.TextBox(graph_id_box, text='graph1', width=11, align='right')
+graph_id_entry_textbox = gui.TextBox(graph_id_box, text='graph1', width=11, align='right')
 
 # # Pixel Options Box
 pixel_options_box = gui.Box(app, grid=[0, 2], width=170, height=150)
 
-pixel_options_box_text = gui.Text(pixel_options_box, text='Pixel Options:', size=11, color='red')
-pixel_options_box_text.tk.config(pady=12)
+pixel_options_box_heading = gui.Text(pixel_options_box, text='Pixel Options:', size=11, color='red')
+pixel_options_box_heading.tk.config(pady=12)
 pixel_options = gui.ButtonGroup(pixel_options_box,
-                                options=[['Add a pixel', 'add'],
-                                         ['Modify a pixel', 'modify'],
+                                options=[['Add a pixel', 'post'],
+                                         ['Modify a pixel', 'put'],
                                          ['Delete a pixel', 'delete']],
-                                selected='add')
+                                selected='post')
 
 # # Date Options Box
 date_options_box = gui.Box(app, grid=[1, 2], width=170, height=150)
 
-date_options_box_text = gui.Text(date_options_box, text='Date options:', size=11, color='red')
-date_options_box_text.tk.config(pady=12)
+date_options_box_heading = gui.Text(date_options_box, text='Date options:', size=11, color='red')
+date_options_box_heading.tk.config(pady=12)
 date_options = gui.ButtonGroup(date_options_box,
                                options=[['Today', 'today'],
                                         ['Custom:', 'custom']],
                                selected='today')
-date_entry = gui.TextBox(date_options_box, text='', width=12)
+date_entry_textbox = gui.TextBox(date_options_box, text='', width=12)
 date_hint_text = gui.Text(date_options_box, text='(YYYY-MM-DD)', size=8)
 
 # Quantity Box
 quantity_box = gui.Box(app, grid=[2, 2], width=170, height=150)
 
-quantity_box_text = gui.Text(quantity_box, text='Pixel Quantity:', size=11, color='red')
-quantity_box_text.tk.config(pady=12)
-quantity_entry_box = gui.TextBox(quantity_box, text='', width=5)
+quantity_box_heading = gui.Text(quantity_box, text='Pixel Quantity:', size=11, color='red')
+quantity_box_heading.tk.config(pady=12)
+quantity_entry_textbox = gui.TextBox(quantity_box, text='', width=5)
 success_error_image = gui.Picture(quantity_box, image='images/blank.png')
 success_error_image.tk.config(pady=20)
 
@@ -88,8 +87,8 @@ button_box = gui.Box(app, grid=[0, 3, 3, 1], width=510, height=60)
 
 button_sub_box = gui.Box(button_box, width=200, height=60)
 button_sub_box.tk.config(pady=10)
-submit_button = gui.PushButton(button_sub_box, do_something, text='Submit', align='left')
-reset_button = gui.PushButton(button_sub_box, reset, text='Reset', align='right')
+submit_button = gui.PushButton(button_sub_box, submit_request_to_api, text='Submit', align='left')
+reset_button = gui.PushButton(button_sub_box, clear_text_entry_fields, text='Reset', align='right')
 
 # Display -----
 app.display()
