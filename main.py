@@ -1,5 +1,6 @@
 import guizero as gui
 import dateoperations as dateops
+import apioperations as apiops
 import webbrowser
 
 # App -----
@@ -37,7 +38,7 @@ app.bg = '#FFFAFA'
 def submit_request_to_api():
     # username = username_entry_textbox.value
     # graph_id = graph_id_entry_textbox.value
-    # request_type = pixel_options.value
+    request_type = pixel_options.value
     date_choice = date_option.value
     custom_date = date_entry_textbox.value
     # quantity = quantity_entry_textbox.value
@@ -53,8 +54,20 @@ def submit_request_to_api():
         date_for_api = dateops_response
         print(date_for_api)
 
-        success_error_image.image = 'images/success.png'
-        app.after(5000, clear_text_entry_fields)
+        if request_type == 'add':
+            api_response = apiops.post_new_pixel()
+        elif request_type == 'modify':
+            api_response = apiops.put_pixel_modification()
+        else:
+            api_response = apiops.delete_existing_pixel()
+
+        if api_response == 'true':
+            success_and_clear()
+
+
+def success_and_clear():
+    success_error_image.image = 'images/success.png'
+    app.after(5000, clear_text_entry_fields)
 
 
 def clear_text_entry_fields():

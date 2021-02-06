@@ -1,16 +1,19 @@
 import requests
 import secrets
 
-PIXELA_ENDPOINT = 'https://pixe.la/v1/users'
+PIXELA_ENDPOINT_ROOT = 'https://pixe.la/v1/users'
 
 
 def post_new_pixel():
-    pass
+    print('New pixel posted.')
+    return 'true'
 
 
 def put_pixel_modification():
-    pass
+    print('Pixel modified.')
+    return 'true'
 
 
 def delete_existing_pixel():
-    pass
+    print('Pixel deleted.')
+    return 'true'
