@@ -1,5 +1,5 @@
 import guizero as gui
-import operations as ops
+import dateoperations as dateops
 import webbrowser
 
 # App -----
@@ -13,26 +13,36 @@ app.bg = '#FFFAFA'
 
 # 1. get values: username, graph ID, request type, date option, quantity
 # 2. call date_parser()
-#       contains logic to check custom date for validity & range, and parse date option into proper string for API)
-# 3. if statement for request type:
+#   a. if date option choice == custom:
+#       check date for validity
+#   b. else date == today
+#   c. reformat date
+# 3. check request type:
 #   a. if request == post:
 #       call post_new_pixel()
 #   b. if request == put:
 #       call modify_pixel()
 #   c. if request == delete:
 #       call delete_pixel()
-# 4. if statement for response to api call in step 3
-#   a. ifSuccess == false:
+# 4. check response to api call in step 3
+#   a. if not isSuccess:
 #       change image to red X
 #       error pop-up (containing error message?)
-#   b. if isSuccess == true:
+#   b. if isSuccess:
 #       change image to green check
 #       call clear_text_entry_fields()
 
 
 def submit_request_to_api():
+    username = username_entry_textbox.value
+    graph_id = graph_id_entry_textbox.value
     request_type = pixel_options.value
-    print(request_type)
+    date_choice = date_option.value
+    custom_date = date_entry_textbox.value
+    quantity = quantity_entry_textbox.value
+
+    dateops_response = dateops.date_handler(date_choice, custom_date)
+
     success_error_image.image = 'images/success.png'
     app.after(5000, clear_text_entry_fields)
 
@@ -88,7 +98,7 @@ date_options_box = gui.Box(app, grid=[1, 2], width=170, height=140)
 
 date_options_box_heading = gui.Text(date_options_box, text='Date options:', size=11, color='red')
 date_options_box_heading.tk.config(pady=12)
-date_choice = gui.ButtonGroup(date_options_box,
+date_option = gui.ButtonGroup(date_options_box,
                               options=[['Today', 'today'],
                                        ['Custom:', 'custom']],
                               selected='today')
