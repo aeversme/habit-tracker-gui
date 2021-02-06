@@ -35,12 +35,12 @@ app.bg = '#FFFAFA'
 
 
 def submit_request_to_api():
-    username = username_entry_textbox.value
-    graph_id = graph_id_entry_textbox.value
-    request_type = pixel_options.value
+    # username = username_entry_textbox.value
+    # graph_id = graph_id_entry_textbox.value
+    # request_type = pixel_options.value
     date_choice = date_option.value
     custom_date = date_entry_textbox.value
-    quantity = quantity_entry_textbox.value
+    # quantity = quantity_entry_textbox.value
 
     dateops_response = dateops.date_handler(date_choice, custom_date)
     if dateops_response == 'invalid date':
@@ -53,8 +53,8 @@ def submit_request_to_api():
         date_for_api = dateops_response
         print(date_for_api)
 
-    success_error_image.image = 'images/success.png'
-    app.after(5000, clear_text_entry_fields)
+        success_error_image.image = 'images/success.png'
+        app.after(5000, clear_text_entry_fields)
 
 
 def clear_text_entry_fields():
