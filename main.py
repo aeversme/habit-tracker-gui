@@ -17,6 +17,7 @@ app.bg = '#FFFAFA'
 #       check date for validity
 #   b. else date == today
 #   c. reformat date
+#   d. handle errors
 # 3. check request type:
 #   a. if request == post:
 #       call post_new_pixel()
@@ -42,6 +43,15 @@ def submit_request_to_api():
     quantity = quantity_entry_textbox.value
 
     dateops_response = dateops.date_handler(date_choice, custom_date)
+    if dateops_response == 'invalid date':
+        app.error(title='Invalid Date', text='You entered an invalid date.\n'
+                                             'Please try again.')
+    elif dateops_response == 'date out of range':
+        app.error(title='Date Out Of Range', text='The date you entered is in the future or too far in the past.\n'
+                                                  'Please try again.')
+    else:
+        date_for_api = dateops_response
+        print(date_for_api)
 
     success_error_image.image = 'images/success.png'
     app.after(5000, clear_text_entry_fields)
