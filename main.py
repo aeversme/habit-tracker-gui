@@ -12,6 +12,7 @@ app.bg = '#FFFAFA'
 
 
 def submit_request_to_api():
+    """Primary app function."""
     username = username_entry_textbox.value
     graph_id = graph_name_combo.value
     request_type = pixel_options.value
@@ -46,6 +47,7 @@ def submit_request_to_api():
 
 
 def is_quantity_greater_than_zero(quantity):
+    """Checks if quantity is greater than zero and returns a Boolean."""
     true_or_false = True
     if quantity == '' or float(quantity) <= 0:
         true_or_false = False
@@ -53,6 +55,7 @@ def is_quantity_greater_than_zero(quantity):
 
 
 def check_api_response(response):
+    """Checks the API response, indicates success and clears the app, or creates an error pop-up."""
     if response[0] == 200:
         success_error_image.image = 'images/success.png'
         app.after(4000, reset_app)
@@ -61,6 +64,7 @@ def check_api_response(response):
 
 
 def reset_app():
+    """Clears text entry boxes and resets radio button selections."""
     quantity_entry_textbox.clear()
     date_entry_textbox.clear()
     success_error_image.image = 'images/blank.png'
@@ -72,6 +76,7 @@ def reset_app():
 
 
 def open_graph_url():
+    """Opens the selected graph in a browser window."""
     username = username_entry_textbox.value
     graph_name = graph_name_combo.value
     graph_url = f'https://pixe.la/v1/users/{username}/graphs/{graph_name}.html'
@@ -79,6 +84,7 @@ def open_graph_url():
 
 
 def change_to_custom():
+    """Changes the date option radio button selection to 'custom.'"""
     date_option_button_list = date_option.children
     date_option_button_list[1].tk.select()
 

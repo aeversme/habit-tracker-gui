@@ -1,14 +1,14 @@
-import datetime as dt
-
 """
-The Pixela pixel APIs expect a 'date' header value in the format YYYYMMDD. These operations transform either the 
-current date or a custom date input into an appropriate string. The custom date is also checked for entry errors and 
+The Pixela APIs expect a 'date' header value in the format YYYYMMDD. These operations transform either the
+current date or a custom date input into an appropriate string. The custom date is also checked for entry errors and
 validity within a specific time range.
 """
 
+import datetime as dt
+
 
 def date_handler(date_option_choice, date_entry):
-    """This function takes in the user's choice of date option and anything in the custom date textbox and returns
+    """Receives the user's choice of date option and any data in the custom date textbox, and returns
     a date in the correct string format."""
     # Flow for 'today'
     if date_option_choice == 'today':
@@ -31,13 +31,13 @@ def date_handler(date_option_choice, date_entry):
 
 
 def format_today_for_api(date):
-    """This function receives the current date and returns a formatted date."""
+    """Receives the current date and returns a formatted date."""
     today_for_api = date.strftime('%Y%m%d')
     return today_for_api
 
 
 def convert_custom_date(date):
-    """This function receives the user's custom date and returns a formatted date."""
+    """Receives the user's custom date and returns a formatted date."""
     date_entry_split = [int(value) for value in date.split('-')]
     year = date_entry_split[0]
     month = date_entry_split[1]
@@ -47,7 +47,7 @@ def convert_custom_date(date):
 
 
 def is_valid_pixela_date(date):
-    """This function checks a formatted date against a valid range and returns a Boolean."""
+    """Checks a formatted date against a valid range and returns a Boolean."""
     is_valid = False
     today_int = int(dt.datetime.now().strftime('%Y%m%d'))
     if (today_int - 10000) < int(date) <= today_int:
