@@ -28,19 +28,34 @@ def submit_request_to_api():
                                                   'Please try again.')
     else:
         date_for_api = dateops_response
-        print(date_for_api)
-
         if request_type == 'add':
-            api_response = apiops.post_new_pixel(username, graph_id, date_for_api, quantity)
+            if not is_quantity_greater_than_zero():
+                app.error(title='Quantity Too Low', text='The quantity should be a positive integer or decimal.\n'
+                                                         'Please try again.')
+            else:
+                post_pixel_response = apiops.post_new_pixel(username, graph_id, date_for_api, quantity)
+                check_api_response(post_pixel_response)
         elif request_type == 'modify':
-            api_response = apiops.put_pixel_modification()
+            put_pixel_response = apiops.put_pixel_modification()
+            check_api_response(put_pixel_response)
         else:
-            api_response = apiops.delete_existing_pixel()
+            delete_pixel_response = apiops.delete_existing_pixel()
+            check_api_response(delete_pixel_response)
 
-        if api_response[0] == 200:
-            display_check_then_clear()
-        else:
-            app.error(title='API Error', text=f'Oops! Something went wrong:\n{api_response[1]}')
+
+def is_quantity_greater_than_zero():
+    true_or_false = True
+    quantity_entry = quantity_entry_textbox.value
+    if quantity_entry == '' or float(quantity_entry) <= 0:
+        true_or_false = False
+    return true_or_false
+
+
+def check_api_response(response):
+    if response[0] == 200:
+        display_check_then_clear()
+    else:
+        app.error(title='API Error', text=f'Oops! Something went wrong:\n{response[1]}')
 
 
 def display_check_then_clear():
