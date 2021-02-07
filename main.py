@@ -10,38 +10,14 @@ app.bg = '#FFFAFA'
 
 # Functions -----
 
-# on Submit button press:
-
-# 1. get values: username, graph ID, request type, date option, quantity
-# 2. call date_parser()
-#   a. if date option choice == custom:
-#       check date for validity
-#   b. else date == today
-#   c. reformat date
-#   d. handle errors
-# 3. check request type:
-#   a. if request == post:
-#       call post_new_pixel()
-#   b. if request == put:
-#       call modify_pixel()
-#   c. if request == delete:
-#       call delete_pixel()
-# 4. check response to api call in step 3
-#   a. if not isSuccess:
-#       change image to red X
-#       error pop-up (containing error message?)
-#   b. if isSuccess:
-#       change image to green check
-#       call clear_text_entry_fields()
-
 
 def submit_request_to_api():
-    # username = username_entry_textbox.value
-    # graph_id = graph_id_entry_textbox.value
+    username = username_entry_textbox.value
+    graph_id = graph_name_combo.value
     request_type = pixel_options.value
     date_choice = date_option.value
     custom_date = date_entry_textbox.value
-    # quantity = quantity_entry_textbox.value
+    quantity = quantity_entry_textbox.value
 
     dateops_response = dateops.date_handler(date_choice, custom_date)
     if dateops_response == 'invalid date':
@@ -55,17 +31,19 @@ def submit_request_to_api():
         print(date_for_api)
 
         if request_type == 'add':
-            api_response = apiops.post_new_pixel()
+            api_response = apiops.post_new_pixel(username, graph_id, date_for_api, quantity)
         elif request_type == 'modify':
             api_response = apiops.put_pixel_modification()
         else:
             api_response = apiops.delete_existing_pixel()
 
-        if api_response == 'true':
-            success_and_clear()
+        if api_response[0] == 200:
+            display_check_then_clear()
+        else:
+            app.error(title='API Error', text=f'Oops! Something went wrong:\n{api_response[1]}')
 
 
-def success_and_clear():
+def display_check_then_clear():
     success_error_image.image = 'images/success.png'
     app.after(5000, clear_text_entry_fields)
 
@@ -77,7 +55,9 @@ def clear_text_entry_fields():
 
 
 def open_graph_url():
-    graph_url = 'https://pixe.la/v1/users/aeversme/graphs/graph1.html'
+    username = username_entry_textbox.value
+    graph_name = graph_name_combo.value
+    graph_url = f'https://pixe.la/v1/users/{username}/graphs/{graph_name}.html'
     webbrowser.open_new(graph_url)
 
 
@@ -103,7 +83,7 @@ graph_button = gui.PushButton(graph_button_box, open_graph_url, text='Go to my g
 
 graph_id_box = gui.Box(graph_properties_box, grid=[2, 0], width=150, height=60)
 graph_id_text = gui.Text(graph_id_box, text='Graph ID: ', size=11, color='red', align='left')
-graph_id_entry_textbox = gui.TextBox(graph_id_box, text='graph1', width=11, align='right')
+graph_name_combo = gui.Combo(graph_id_box, options=['graph1', 'test1'], selected='test1', width=11, align='right')
 
 # # Pixel Options Box
 pixel_options_box = gui.Box(app, grid=[0, 2], width=170, height=140)
@@ -144,6 +124,7 @@ button_sub_box = gui.Box(button_box, width=250, height=60)
 button_sub_box.tk.config(pady=10)
 submit_button = gui.PushButton(button_sub_box, submit_request_to_api, text='Submit', align='left', pady=5, width=6)
 reset_button = gui.PushButton(button_sub_box, clear_text_entry_fields, text='Reset', align='right', pady=5, width=6)
+
 
 # Display -----
 app.display()
