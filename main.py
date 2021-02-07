@@ -28,19 +28,21 @@ def submit_request_to_api():
                                                   'Please try again.')
     else:
         date_for_api = dateops_response
-        if request_type == 'add':
+
+        if request_type == 'delete':
+            delete_pixel_response = apiops.delete_existing_pixel(username, graph_id, date_for_api)
+            check_api_response(delete_pixel_response)
+        else:
             if not is_quantity_greater_than_zero():
                 app.error(title='Quantity Too Low', text='The quantity should be a positive integer or decimal.\n'
                                                          'Please try again.')
             else:
-                post_pixel_response = apiops.post_new_pixel(username, graph_id, date_for_api, quantity)
-                check_api_response(post_pixel_response)
-        elif request_type == 'modify':
-            put_pixel_response = apiops.put_pixel_modification()
-            check_api_response(put_pixel_response)
-        else:
-            delete_pixel_response = apiops.delete_existing_pixel()
-            check_api_response(delete_pixel_response)
+                if request_type == 'add':
+                    post_pixel_response = apiops.post_new_pixel(username, graph_id, date_for_api, quantity)
+                    check_api_response(post_pixel_response)
+                elif request_type == 'modify':
+                    put_pixel_response = apiops.put_pixel_modification(username, graph_id, date_for_api, quantity)
+                    check_api_response(put_pixel_response)
 
 
 def is_quantity_greater_than_zero():
@@ -53,14 +55,10 @@ def is_quantity_greater_than_zero():
 
 def check_api_response(response):
     if response[0] == 200:
-        display_check_then_clear()
+        success_error_image.image = 'images/success.png'
+        app.after(4000, clear_text_entry_fields)
     else:
         app.error(title='API Error', text=f'Oops! Something went wrong:\n{response[1]}')
-
-
-def display_check_then_clear():
-    success_error_image.image = 'images/success.png'
-    app.after(5000, clear_text_entry_fields)
 
 
 def clear_text_entry_fields():
