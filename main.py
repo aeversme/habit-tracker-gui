@@ -33,7 +33,7 @@ def submit_request_to_api():
             delete_pixel_response = apiops.delete_existing_pixel(username, graph_id, date_for_api)
             check_api_response(delete_pixel_response)
         else:
-            if not is_quantity_greater_than_zero():
+            if not is_quantity_greater_than_zero(quantity):
                 app.error(title='Quantity Too Low', text='The quantity should be a positive integer or decimal.\n'
                                                          'Please try again.')
             else:
@@ -45,10 +45,9 @@ def submit_request_to_api():
                     check_api_response(put_pixel_response)
 
 
-def is_quantity_greater_than_zero():
+def is_quantity_greater_than_zero(quantity):
     true_or_false = True
-    quantity_entry = quantity_entry_textbox.value
-    if quantity_entry == '' or float(quantity_entry) <= 0:
+    if quantity == '' or float(quantity) <= 0:
         true_or_false = False
     return true_or_false
 
@@ -56,15 +55,20 @@ def is_quantity_greater_than_zero():
 def check_api_response(response):
     if response[0] == 200:
         success_error_image.image = 'images/success.png'
-        app.after(4000, clear_text_entry_fields)
+        app.after(4000, reset_app)
     else:
         app.error(title='API Error', text=f'Oops! Something went wrong:\n{response[1]}')
 
 
-def clear_text_entry_fields():
+def reset_app():
     quantity_entry_textbox.clear()
     date_entry_textbox.clear()
     success_error_image.image = 'images/blank.png'
+    pixel_option_button_list = pixel_options.children
+    pixel_option_button_list[0].tk.select()
+    date_option_button_list = date_option.children
+    date_option_button_list[0].tk.select()
+    quantity_entry_textbox.focus()
 
 
 def open_graph_url():
@@ -72,6 +76,11 @@ def open_graph_url():
     graph_name = graph_name_combo.value
     graph_url = f'https://pixe.la/v1/users/{username}/graphs/{graph_name}.html'
     webbrowser.open_new(graph_url)
+
+
+def change_to_custom():
+    date_option_button_list = date_option.children
+    date_option_button_list[1].tk.select()
 
 
 # Widgets -----
@@ -119,6 +128,7 @@ date_option = gui.ButtonGroup(date_options_box,
                                        ['Custom:', 'custom']],
                               selected='today')
 date_entry_textbox = gui.TextBox(date_options_box, text='', width=12)
+date_entry_textbox.when_clicked = change_to_custom
 date_hint_text = gui.Text(date_options_box, text='(YYYY-MM-DD)', size=8)
 
 # Quantity Box
@@ -127,6 +137,7 @@ quantity_box = gui.Box(app, grid=[2, 2], width=170, height=140)
 quantity_box_heading = gui.Text(quantity_box, text='Pixel Quantity:', size=11, color='red')
 quantity_box_heading.tk.config(pady=12)
 quantity_entry_textbox = gui.TextBox(quantity_box, text='', width=5)
+quantity_entry_textbox.focus()
 success_error_image = gui.Picture(quantity_box, image='images/blank.png')
 success_error_image.tk.config(pady=20)
 
@@ -136,7 +147,7 @@ button_box = gui.Box(app, grid=[0, 3, 3, 1], width=510, height=60)
 button_sub_box = gui.Box(button_box, width=250, height=60)
 button_sub_box.tk.config(pady=10)
 submit_button = gui.PushButton(button_sub_box, submit_request_to_api, text='Submit', align='left', pady=5, width=6)
-reset_button = gui.PushButton(button_sub_box, clear_text_entry_fields, text='Reset', align='right', pady=5, width=6)
+reset_button = gui.PushButton(button_sub_box, reset_app, text='Reset', align='right', pady=5, width=6)
 
 
 # Display -----
