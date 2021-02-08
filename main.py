@@ -4,6 +4,7 @@ import apioperations as apiops
 import webbrowser
 
 # App -----
+
 app = gui.App(title='Pixela Habit Tracker', layout='grid', width=510, height=340)
 app.bg = '#FFFAFA'
 
@@ -20,6 +21,10 @@ def submit_request_to_api():
     custom_date = date_entry_textbox.value
     quantity = quantity_entry_textbox.value
 
+    submit_request_with_values(username, graph_id, request_type, date_choice, custom_date, quantity)
+
+
+def submit_request_with_values(username, graph_id, request_type, date_choice, custom_date, quantity):
     dateops_response = dateops.date_handler(date_choice, custom_date)
     if dateops_response == 'invalid date':
         app.error(title='Invalid Date', text='You entered an invalid date.\n'
@@ -157,4 +162,5 @@ reset_button = gui.PushButton(button_sub_box, reset_app, text='Reset', align='ri
 
 
 # Display -----
+
 app.display()
