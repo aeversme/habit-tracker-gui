@@ -25,6 +25,7 @@ def submit_request_to_api():
 
 
 def submit_request_with_values(username, graph_id, request_type, date_choice, custom_date, quantity):
+    """Receives values from the GUI, processes for errors, and calls the appropriate API."""
     dateops_response = dateops.date_handler(date_choice, custom_date)
     if dateops_response == 'invalid date':
         app.error(title='Invalid Date', text='You entered an invalid date.\n'
@@ -61,7 +62,7 @@ def is_quantity_greater_than_zero(quantity):
 
 def check_api_response(response):
     """Checks the API response, indicates success and clears the app, or creates an error pop-up."""
-    if response[0] == 200:
+    if response[0]:
         success_error_image.image = 'images/success.png'
         app.after(4000, reset_app)
     else:
@@ -116,7 +117,14 @@ graph_button = gui.PushButton(graph_button_box, open_graph_url, text='Go to my g
 
 graph_id_box = gui.Box(graph_properties_box, grid=[2, 0], width=150, height=60)
 graph_id_text = gui.Text(graph_id_box, text='Graph ID: ', size=11, color='red', align='left')
-graph_name_combo = gui.Combo(graph_id_box, options=['graph1', 'test1'], selected='test1', width=11, align='right')
+graph_name_combo = gui.Combo(graph_id_box,
+                             options=[
+                                 'graph1',
+                                 'test1'
+                             ],
+                             selected='graph1',
+                             width=11,
+                             align='right')
 
 # # Pixel Options Box
 pixel_options_box = gui.Box(app, grid=[0, 2], width=170, height=140)
