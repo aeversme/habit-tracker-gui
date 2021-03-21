@@ -148,7 +148,7 @@ date_option = gui.ButtonGroup(date_options_box,
                               selected='today')
 date_entry_textbox = gui.TextBox(date_options_box, text='', width=12)
 date_entry_textbox.when_clicked = change_to_custom
-date_hint_text = gui.Text(date_options_box, text='(YYYY-MM-DD)', size=8)
+date_hint_text = gui.Text(date_options_box, text='(YYYY-M-D)', size=8)
 
 # Quantity Box
 quantity_box = gui.Box(app, grid=[2, 2], width=170, height=140)

@@ -11,6 +11,11 @@ HEADERS = {
 }
 
 
+def get_token():
+    """Receives a username and returns the associated API token."""
+    pass
+
+
 def post_new_pixel(username, graph_id, date, quantity):
     """Receives inputs from the app window, submits a POST request, and returns the API response code and message."""
     pixel_creation_endpoint = f'{PIXELA_ENDPOINT_ROOT}/{username}/graphs/{graph_id}'
