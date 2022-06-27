@@ -64,7 +64,7 @@ def check_api_response(response):
     """Checks the API response, indicates success and clears the app, or creates an error pop-up."""
     if response[0]:
         success_error_image.image = 'images/success.png'
-        app.after(4000, reset_app)
+        app.after(2000, reset_app)
     else:
         app.error(title='API Error', text=f'Oops! Something went wrong:\n{response[1]}')
 
